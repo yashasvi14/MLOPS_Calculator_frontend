@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+
+  spring-boot-app:
+    image: sarathchandra24/calculator-backend:v1
+    ports:
+      - "8080:8080"
+    networks:
+      - calculator_app_network
+
+  python-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "45000:5000"
+    environment:
+      - SPRING_HOST_NAME=spring-boot-app
+      - SPRING_HOST_PORT=8080
+    networks:
+      - calculator_app_network
+    depends_on:
+      - spring-boot-app
+
+networks:
+  calculator_app_network:
+    driver: bridge
